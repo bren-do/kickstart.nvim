@@ -6,7 +6,10 @@ return {
     config = function()
       local lint = require 'lint'
       lint.linters_by_ft = {
-        markdown = { 'markdownlint' },
+        typescript = { 'eslint' },
+        javascript = { 'eslint' },
+        javascriptreact = { 'eslint' },
+        typescriptreact = { 'eslint' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
@@ -53,6 +56,9 @@ return {
           if vim.bo.modifiable then lint.try_lint() end
         end,
       })
+      --      vim.keymap.set('n', '<leader>l', function()
+      --        lint.try_lint()
+      --      end, { desc = 'Trigger linting for current file' })
     end,
   },
 }
