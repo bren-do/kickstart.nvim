@@ -76,4 +76,14 @@ return {
       { '<leader>gY', '<cmd>GitLink!<cr>', mode = { 'n', 'v' }, desc = '[G]it Open link' },
     },
   },
+  {
+    'chrisgrieser/nvim-early-retirement',
+    config = true,
+    event = 'VeryLazy',
+    opts = {
+      retirementAgeMins = 120,
+      minimumBufferNum = 10,
+      deleteBufferWhenFileDeleted = true,
+    },
+  },
 }

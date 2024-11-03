@@ -22,7 +22,13 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
+    'mxsdev/nvim-dap-vscode-js',
+    -- lazy spec to build "microsoft/vscode-js-debug" from source
+    {
+      'microsoft/vscode-js-debug',
+      version = '1.x',
+      build = 'npm i && npm run compile vsDebugServerBundle && mv dist out',
+    },
   },
   keys = function(_, keys)
     local dap = require 'dap'
@@ -33,13 +39,13 @@ return {
       { '<F1>', dap.step_into, desc = 'Debug: Step Into' },
       { '<F2>', dap.step_over, desc = 'Debug: Step Over' },
       { '<F3>', dap.step_out, desc = 'Debug: Step Out' },
-      { '<leader>b', dap.toggle_breakpoint, desc = 'Debug: Toggle Breakpoint' },
+      { '<leader>db', dap.toggle_breakpoint, desc = 'Debug: Toggle Breakpoint' },
       {
-        '<leader>B',
+        '<leader>dB',
         function()
           dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
         end,
-        desc = 'Debug: Set Breakpoint',
+        desc = 'Debug: Set Breakpoint Condition',
       },
       -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
       { '<F7>', dapui.toggle, desc = 'Debug: See last session result.' },
@@ -49,6 +55,16 @@ return {
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
+
+    vim.api.nvim_set_hl(0, 'DapBreakpoint', { ctermbg = 0, fg = '#993939', bg = '#31353f' })
+    vim.api.nvim_set_hl(0, 'DapLogPoint', { ctermbg = 0, fg = '#61afef', bg = '#31353f' })
+    vim.api.nvim_set_hl(0, 'DapStopped', { ctermbg = 0, fg = '#98c379', bg = '#31353f' })
+
+    vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint', linehl = 'DapBreakpoint', numhl = 'DapBreakpoint' })
+    vim.fn.sign_define('DapBreakpointCondition', { text = 'ﳁ', texthl = 'DapBreakpoint', linehl = 'DapBreakpoint', numhl = 'DapBreakpoint' })
+    vim.fn.sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpoint', linehl = 'DapBreakpoint', numhl = 'DapBreakpoint' })
+    vim.fn.sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint', linehl = 'DapLogPoint', numhl = 'DapLogPoint' })
+    vim.fn.sign_define('DapStopped', { text = '', texthl = 'DapStopped', linehl = 'DapStopped', numhl = 'DapStopped' })
 
     require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
@@ -63,7 +79,7 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        'vscode-js-debug',
       },
     }
 
@@ -93,13 +109,47 @@ return {
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
-    -- Install golang specific config
-    require('dap-go').setup {
-      delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-        detached = vim.fn.has 'win32' == 0,
-      },
+    -- Install typescript specific config
+    require('dap-vscode-js').setup {
+      -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+      -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
+      -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
+      adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+      debugger_path = vim.fn.stdpath 'data' .. '/lazy/vscode-js-debug',
+      -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging
+      -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
+      -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
     }
+
+    for _, language in ipairs { 'typescript', 'javascript' } do
+      require('dap').configurations[language] = {
+        {
+          {
+            type = 'pwa-node',
+            request = 'launch',
+            name = 'Debug Jest Tests',
+            -- trace = true, -- include debugger info
+            runtimeExecutable = 'node',
+            runtimeArgs = {
+              './node_modules/jest/bin/jest.js',
+              '--runInBand',
+            },
+            rootPath = '${workspaceFolder}',
+            cwd = '${workspaceFolder}',
+            console = 'integratedTerminal',
+            internalConsoleOptions = 'neverOpen',
+            sourceMaps = true,
+            skipFiles = {
+              '<node_internals>/**',
+              'node_modules/**',
+            },
+            resolveSourceMapLocations = {
+              '${workspaceFolder}/**',
+              '!**/node_modules/**',
+            },
+          },
+        },
+      }
+    end
   end,
 }
