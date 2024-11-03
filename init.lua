@@ -12,11 +12,9 @@ vim.g.have_nerd_font = true
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
--- Make line numbers default
--- vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
-vim.o.relativenumber = true
+-- Set relative line numbers with absolute number on cursor
+vim.opt.rnu = true
+vim.opt.nu = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -110,9 +108,27 @@ vim.diagnostic.config {
 }
 
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- vim.keymap.set('n', '<Leader>q', function()
+--   vim.diagnostic.setloclist { open = false } -- don't open and focus
+--   local window = vim.api.nvim_get_current_win()
+--   vim.cmd.lwindow() -- open+focus loclist if has entries, else close -- this is the magic toggle command
+--   vim.api.nvim_set_current_win(window) -- restore focus to window you were editing (delete this if you want to stay in loclist)
+-- end, { desc = 'Toggle diagnostic [Q]uickfix list' })
 
 -- Toggle a floating window, your cursor needs to be on top of an error
 vim.keymap.set('n', '<leader>k', vim.diagnostic.open_float, { desc = 'Open Floating Diagnostic Window' })
+
+-- Emacs-style editing on the command-line.
+-- Top two break autocomplete
+-- vim.keymap.set('c', '<C-P>', '<Up>', { noremap = true })
+-- vim.keymap.set('c', '<C-N>', '<Down>', { noremap = true })
+vim.keymap.set('c', '<C-A>', '<Home>', { noremap = true })
+vim.keymap.set('c', '<C-B>', '<Left>', { noremap = true })
+vim.keymap.set('c', '<C-D>', '<Del>', { noremap = true })
+vim.keymap.set('c', '<C-E>', '<End>', { noremap = true })
+vim.keymap.set('c', '<C-F>', '<Right>', { noremap = true })
+vim.keymap.set('c', '<Esc><C-B>', '<S-Left>', { noremap = true })
+vim.keymap.set('c', '<Esc><C-F>', '<S-Right>', { noremap = true })
 
 -- Diagnostic config
 -- this disables virtual text for error info
@@ -241,11 +257,12 @@ require('lazy').setup({
       spec = {
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
         { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
-        { '<leader>d', group = '[D]ocument' },
+        { '<leader>d', group = '[D]ebug', mode = { 'n' } },
         { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
         { '<leader>r', group = '[R]ename' },
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]est' },
+        { '<leader>td', group = '[T]est [D]ebug', mode = { 'n', 'v' } },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
@@ -322,7 +339,13 @@ require('lazy').setup({
         --     path_display = { 'hidden' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          live_grep = {
+            mappings = {
+              i = { ['<c-space>'] = require('telescope.actions').to_fuzzy_refine },
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = { require('telescope.themes').get_dropdown() },
         },
@@ -806,22 +829,22 @@ require('lazy').setup({
     config = function()
       require('mini.ai').setup { n_lines = 500 }
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      -- -- Simple and easy statusline.
+      -- --  You could remove this setup call if you don't like it,
+      -- --  and try some other statusline plugin
+      -- local statusline = require 'mini.statusline'
+      -- -- set use_icons to true if you have a Nerd Font
+      -- statusline.setup { use_icons = vim.g.have_nerd_font }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function() return '%2l:%-2v' end
+      -- ---@diagnostic disable-next-line: duplicate-set-field
+      --statusline.section_location = function() return '%2l:%-2v' end
 
       -- TODO: Figure out how to truncate git branch to something that doesn't block out everything
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_git = function() return '' end
+      -- ---@diagnostic disable-next-line: duplicate-set-field
+      --statusline.section_git = function() return '' end
 
       -- ... and there is more!
       --  Check out: https://github.com/nvim-mini/mini.nvim
@@ -831,7 +854,27 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     config = function()
-      local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'typescript', 'javascript' }
+      local filetypes = {
+        'bash',
+        'c',
+        'clojure',
+        'css',
+        'diff',
+        'html',
+        'fennel',
+        'javascript',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'python',
+        'query',
+        'vim',
+        'vimdoc',
+        'rust',
+        'typescript',
+        'tsx',
+      }
       require('nvim-treesitter').install(filetypes)
       vim.api.nvim_create_autocmd('FileType', {
         pattern = filetypes,
@@ -849,7 +892,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',

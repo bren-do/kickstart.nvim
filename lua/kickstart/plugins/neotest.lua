@@ -38,11 +38,25 @@ return {
       desc = 'Run Nearest',
     },
     {
+      '<leader>tdr',
+      function()
+        require('neotest').run.run { strategy = 'dap' }
+      end,
+      desc = '[D]ebug Nea[r]est',
+    },
+    {
       '<leader>tl',
       function()
         require('neotest').run.run_last()
       end,
       desc = 'Run Last',
+    },
+    {
+      '<leader>tdl',
+      function()
+        require('neotest').run.run_last { strategy = 'dap' }
+      end,
+      desc = '[D]ebug [L]ast',
     },
     {
       '<leader>ts',
