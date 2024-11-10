@@ -77,6 +77,9 @@ vim.opt.scrolloff = 10
 -- For better experience with auto-session
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
+-- So neogit will refresh buffers on branch change
+vim.cmd 'set autoread | au CursorHold * checktime'
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -813,6 +816,13 @@ require('lazy').setup({
           { name = 'path' },
         },
       }
+
+      cmp.setup.filetype({ 'sql' }, {
+        sources = {
+          { name = 'vim-dadbod-completion' },
+          { name = 'buffer' },
+        },
+      })
     end,
   },
   { -- You can easily change to a different colorscheme.
@@ -924,6 +934,7 @@ require('lazy').setup({
   require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.dadbod',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
