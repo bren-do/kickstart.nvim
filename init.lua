@@ -85,7 +85,7 @@ vim.o.confirm = true
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
 -- So neogit will refresh buffers on branch change
-vim.cmd 'set autoread | au CursorHold * checktime'
+vim.cmd 'set autoread | au CursorHold * silent! checktime'
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`

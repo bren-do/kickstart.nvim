@@ -62,7 +62,13 @@ return {
       'nvim-telescope/telescope.nvim', -- optional
       'isakbm/gitgraph.nvim',
     },
-    config = true,
+    config = function()
+      require('neogit').setup {
+        integrations = {
+          diffview = true,
+        },
+      }
+    end,
     keys = {
       { '<leader>gg', '<cmd>Neogit<cr>', desc = '[G]it open Neo[G]it' },
     },
@@ -86,4 +92,13 @@ return {
       deleteBufferWhenFileDeleted = true,
     },
   },
+  {
+    'https://github.com/nvim-treesitter/nvim-treesitter-context',
+    config = function()
+      vim.keymap.set('n', '[c', function()
+        require('treesitter-context').go_to_context(vim.v.count1)
+      end, { silent = true })
+    end,
+  },
+  { 'sindrets/diffview.nvim', opts = { default_args = { DiffviewOpen = { '--imply-local' } } } },
 }
