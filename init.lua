@@ -78,7 +78,7 @@ vim.opt.scrolloff = 10
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
 -- So neogit will refresh buffers on branch change
-vim.cmd 'set autoread | au CursorHold * checktime'
+vim.cmd 'set autoread | au CursorHold * silent! checktime'
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -916,8 +916,7 @@ require('lazy').setup({
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
