@@ -911,6 +911,7 @@ require('lazy').setup({
         'vim',
         'vimdoc',
         'rust',
+        'scheme',
         'typescript',
         'tsx',
       },
