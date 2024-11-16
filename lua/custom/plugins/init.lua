@@ -101,4 +101,42 @@ return {
     end,
   },
   { 'sindrets/diffview.nvim', opts = { default_args = { DiffviewOpen = { '--imply-local' } } } },
+  {
+    'dundalek/parpar.nvim',
+    dependencies = { 'gpanders/nvim-parinfer', 'julienvincent/nvim-paredit' },
+    config = function()
+      local paredit = require 'nvim-paredit'
+      require('parpar').setup {
+        paredit = {
+          -- pass any nvim-paredit options here
+          keys = {
+            -- custom bindings are automatically wrapped
+            ['<C-h>'] = { paredit.api.slurp_backwards, 'Slurp backwards' },
+            ['<C-j>'] = { paredit.api.barf_backwards, 'Barf backwards' },
+            ['<C-k>'] = { paredit.api.barf_forwards, 'Barf forwards' },
+            ['<C-l>'] = { paredit.api.slurp_forwards, 'Slurp forwards' },
+          },
+        },
+      }
+    end,
+  },
+  {
+    'Olical/conjure',
+    config = function()
+      -- Disable the documentation mapping
+      vim.g['conjure#mapping#doc_word'] = false
+      -- Rebind it from K to <prefix>gk
+      vim.g['conjure#mapping#doc_word'] = 'gk'
+      -- Disable auto_require
+      vim.g['conjure#client#clojure#nrepl#eval#auto_require'] = false
+      -- Disable auto_repl for clojure
+      vim.g['conjure#client#clojure#nrepl#connection#auto_repl#enabled'] = false
+      -- Set fennel client to nfnl
+      vim.g['conjure#filetype#fennel'] = 'conjure.client.fennel.nfnl'
+    end,
+  },
+  {
+    'Olical/nfnl',
+    ft = 'fennel',
+  },
 }
