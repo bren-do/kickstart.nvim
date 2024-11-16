@@ -267,7 +267,7 @@ require('lazy').setup({
         { '<leader>e', group = '[E]val', mode = { 'n' } },
         { '<leader>ec', group = '[E]val and [C]omment', mode = { 'n' } },
         { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
-        { '<leader>r', group = 'Rep[L]', mode = { 'n' } },
+        { '<leader>l', group = 'Rep[L]', mode = { 'n' } },
         { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]est' },
