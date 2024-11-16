@@ -692,11 +692,19 @@ require('lazy').setup({
         markdown = { 'prettier' },
         graphql = { 'prettier' },
         fennel = { 'fnlfmt' },
+        scheme = { 'schemat' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+      formatters = {
+        schemat = {
+          command = 'schemat',
+          args = { '<', '$FILENAME' },
+          stdin = false,
+        },
       },
     },
   },
