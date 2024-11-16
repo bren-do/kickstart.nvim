@@ -141,4 +141,19 @@ return {
     'Olical/nfnl',
     ft = 'fennel',
   },
+  {
+    'HiPhish/rainbow-delimiters.nvim',
+    config = function()
+      vim.g.rainbow_delimiters = {
+        highlight = {
+          'RainbowDelimiterCyan',
+          'RainbowDelimiterGreen',
+          'RainbowDelimiterBlue',
+          'RainbowDelimiterYellow',
+          'RainbowDelimiterRed',
+          'RainbowDelimiterViolet',
+        },
+      }
+    end,
+  },
 }
