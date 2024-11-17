@@ -128,7 +128,7 @@ return {
       -- Rebind it from K to <prefix>ck
       vim.g['conjure#mapping#doc_word'] = 'ck'
       -- Rebind it from <prefix>gd to <prefix>cd
-      vim.g['conjure#mapping#def_word'] = 'cd'
+      vim.g['conjure#mapping#def_word'] = 'cD'
       -- Disable auto_require
       vim.g['conjure#client#clojure#nrepl#eval#auto_require'] = false
       -- Disable auto_repl for clojure
