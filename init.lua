@@ -867,8 +867,9 @@ require('lazy').setup({
       local f = function(args)
         vim.b[args.buf].miniai_disable = true
       end
-      vim.api.nvim_create_autocmd('Filetype', { pattern = 'fennel', callback = f })
-      vim.api.nvim_create_autocmd('Filetype', { pattern = 'clojure', callback = f })
+      for _, filetype in pairs { 'fennel', 'clojure', 'scheme', 'lisp' } do
+        vim.api.nvim_create_autocmd('Filetype', { pattern = filetype, callback = f })
+      end
 
       -- -- Simple and easy statusline.
       -- --  You could remove this setup call if you don't like it,
