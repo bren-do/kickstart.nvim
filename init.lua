@@ -610,6 +610,7 @@ require('lazy').setup({
             },
           },
         },
+        clojure_lsp = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -705,6 +706,7 @@ require('lazy').setup({
         markdown = { 'prettier' },
         graphql = { 'prettier' },
         fennel = { 'fnlfmt' },
+        clojure = { 'cljfmt' },
         scheme = { 'schemat' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
