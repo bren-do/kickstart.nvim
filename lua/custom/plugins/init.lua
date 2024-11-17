@@ -68,6 +68,12 @@ return {
           diffview = true,
         },
       }
+      -- So neogit will refresh buffers on branch change
+      vim.o.autoread = true
+      vim.api.nvim_create_autocmd('CursorHold', {
+        pattern = '*',
+        command = 'silent! checktime',
+      })
     end,
     keys = {
       { '<leader>gg', '<cmd>Neogit<cr>', desc = '[G]it open Neo[G]it' },

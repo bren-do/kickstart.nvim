@@ -77,9 +77,6 @@ vim.opt.scrolloff = 10
 -- For better experience with auto-session
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
--- So neogit will refresh buffers on branch change
-vim.cmd 'set autoread | au CursorHold * silent! checktime'
-
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
