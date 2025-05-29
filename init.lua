@@ -630,7 +630,7 @@ require('lazy').setup({
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
                 extraPaths = {
-                  vim.fn.expand '${workspaceFolder}/.venv/lib/python3.12/site-packages',
+                  vim.fn.expand('${workspaceFolder}/.venv/lib/python' .. vim.fn.system('python -c "import sys; print(f\'{sys.version_info.major}.{sys.version_info.minor}\')"'):gsub('%s+', '') .. '/site-packages'),
                 },
                 diagnosticSeverityOverrides = {
                   reportUndefinedVariable = 'none',
