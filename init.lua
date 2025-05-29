@@ -620,21 +620,22 @@ require('lazy').setup({
         pyright = {
           disableOrganizeImports = true,
           disableTaggedHints = true,
-        },
-        python = {
-          analysis = {
-            typeCheckingMode = 'standard',
-            autoImportCompletions = true,
-            autoFormatStrings = true,
-            fixAll = { 'source.convertImportFormat', 'source.unusedImports' },
-            autoSearchPaths = true,
-            useLibraryCodeForTypes = true,
-            extraPaths = {
-              vim.fn.expand '${workspaceFolder}/.venv/lib/python3.12/site-packages',
-            },
-            diagnosticSeverityOverrides = {
-              -- https://github.com/microsoft/pyright/blob/main/docs/configuration.md#type-check-diagnostics-settings
-              reportUndefinedVariable = 'none',
+          settings = {
+            python = {
+              analysis = {
+                typeCheckingMode = 'standard',
+                autoImportCompletions = true,
+                autoFormatStrings = true,
+                fixAll = { 'source.convertImportFormat', 'source.unusedImports' },
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                extraPaths = {
+                  vim.fn.expand '${workspaceFolder}/.venv/lib/python3.12/site-packages',
+                },
+                diagnosticSeverityOverrides = {
+                  reportUndefinedVariable = 'none',
+                },
+              },
             },
           },
         },
