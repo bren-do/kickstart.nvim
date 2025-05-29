@@ -291,7 +291,8 @@ require('lazy').setup({
     -- instead of just disabling it here, to keep your config clean.
     enabled = true,
     event = 'VimEnter',
-    commit = 'df534c3042572fb958586facd02841e10186707c', -- TODO: Is this pinned version necessary?
+    --commit = 'df534c3042572fb958586facd02841e10186707c',
+    branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -596,6 +597,7 @@ require('lazy').setup({
           -- on_attach = on_attach,
           settings = {
             typescript = {
+              tsserver = { maxTsServerMemory = 8192 },
               inlayHints = {
                 parameterNames = { enabled = 'all' },
                 parameterTypes = { enabled = true },
@@ -608,6 +610,35 @@ require('lazy').setup({
           },
         },
         clojure_lsp = {},
+        ruff = {
+          init_options = {
+            settings = {
+              -- Ruff language server settings go here
+            },
+          },
+        },
+        pyright = {
+          disableOrganizeImports = true,
+          disableTaggedHints = true,
+        },
+        python = {
+          analysis = {
+            typeCheckingMode = 'standard',
+            autoImportCompletions = true,
+            autoFormatStrings = true,
+            fixAll = { 'source.convertImportFormat', 'source.unusedImports' },
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+            extraPaths = {
+              vim.fn.expand '${workspaceFolder}/.venv/lib/python3.12/site-packages',
+            },
+            diagnosticSeverityOverrides = {
+              -- https://github.com/microsoft/pyright/blob/main/docs/configuration.md#type-check-diagnostics-settings
+              reportUndefinedVariable = 'none',
+            },
+          },
+        },
+        taplo = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -706,7 +737,7 @@ require('lazy').setup({
         clojure = { 'cljfmt' },
         scheme = { 'schemat' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'isort' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -892,12 +923,15 @@ require('lazy').setup({
         'luadoc',
         'markdown',
         'markdown_inline',
+        'ninja',
         'python',
         'query',
         'vim',
         'vimdoc',
         'rust',
+        'rst',
         'scheme',
+        'toml',
         'typescript',
         'tsx',
       }
