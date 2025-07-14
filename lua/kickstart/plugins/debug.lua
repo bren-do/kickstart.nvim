@@ -20,15 +20,6 @@ return {
     -- Installs the debug adapters for you
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-
-    -- Add your own debuggers here
-    'mxsdev/nvim-dap-vscode-js',
-    -- lazy spec to build "microsoft/vscode-js-debug" from source
-    {
-      'microsoft/vscode-js-debug',
-      version = '1.x',
-      build = 'npm i && npm run compile vsDebugServerBundle && mv dist out',
-    },
   },
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
@@ -96,7 +87,8 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'vscode-js-debug',
+        'js',
+        'js-debug-adapter',
       },
     }
 
@@ -138,34 +130,56 @@ return {
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
+    --- Gets a path to a package in the Mason registry.
+    --- Prefer this to `get_package`, since the package might not always be
+    --- available yet and trigger errors.
+    ---@param pkg string
+    ---@param path? string
+    local function get_pkg_path(pkg, path)
+      pcall(require, 'mason')
+      local root = vim.env.MASON or (vim.fn.stdpath 'data' .. '/mason')
+      path = path or ''
+      local ret = root .. '/packages/' .. pkg .. '/' .. path
+      return ret
+    end
+
     -- Install typescript specific config
-    require('dap-vscode-js').setup {
-      -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
-      -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
-      -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
-      adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
-      debugger_path = vim.fn.stdpath 'data' .. '/lazy/vscode-js-debug',
-      -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging
-      -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
-      -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
-      log_console_level = false,
+    dap.adapters['pwa-node'] = {
+      type = 'server',
+      host = 'localhost',
+      port = '${port}',
+      executable = {
+        command = 'node',
+        -- 💀 Make sure to update this path to point to your installation
+        args = { get_pkg_path('js-debug-adapter', '/js-debug/src/dapDebugServer.js'), '${port}' },
+      },
+      options = {
+        detached = false,
+      },
     }
 
     for _, language in ipairs { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' } do
       require('dap').configurations[language] = {
         {
+          name = 'Launch file',
           type = 'pwa-node',
           request = 'launch',
-          name = 'Launch file',
-          program = '${file}',
+          program = function()
+            local currentFilePath = vim.fn.expand '%'
+
+            return vim.fn.input('Path to executable: ', currentFilePath, 'file')
+          end,
           cwd = '${workspaceFolder}',
         },
         {
+          name = 'Attach to process',
           type = 'pwa-node',
           request = 'attach',
-          name = 'Attach',
-          processId = require('dap.utils').pick_process,
-          cwd = '${workspaceFolder}',
+          -- port = 9229,
+          restart = true,
+          cwd = vim.fn.getcwd(),
+          sourceMaps = true,
+          protocol = 'inspector',
         },
       }
     end
