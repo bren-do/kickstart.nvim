@@ -555,6 +555,22 @@ require('lazy').setup({
         end,
       })
 
+      -- Defers Hover to Pyright
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client == nil then
+            return
+          end
+          if client.name == 'ruff' then
+            -- Disable hover in favor of Pyright
+            client.server_capabilities.hoverProvider = false
+          end
+        end,
+        desc = 'LSP: Disable hover capability from Ruff',
+      })
+
       -- Diagnostic Config
       -- See :help vim.diagnostic.Opts
       vim.diagnostic.config {
@@ -641,8 +657,6 @@ require('lazy').setup({
               analysis = {
                 typeCheckingMode = 'standard',
                 autoImportCompletions = true,
-                autoFormatStrings = true,
-                fixAll = { 'source.convertImportFormat', 'source.unusedImports' },
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
                 extraPaths = {
@@ -758,7 +772,14 @@ require('lazy').setup({
         clojure = { 'cljfmt' },
         scheme = { 'schemat' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'isort' },
+        python = {
+          -- To fix auto-fixable lint errors.
+          'ruff_fix',
+          -- To run the Ruff formatter.
+          'ruff_format',
+          -- To organize the imports.
+          'ruff_organize_imports',
+        },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
