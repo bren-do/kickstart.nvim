@@ -642,6 +642,10 @@ require('lazy').setup({
               tsconfig = {
                 path = 'tsconfig.json',
               },
+              -- Add root directory configuration
+              root_dir = function(fname)
+                return require('lspconfig.util').root_pattern('tsconfig.json')(fname) or vim.loop.cwd()
+              end,
             },
           },
         },
