@@ -676,6 +676,11 @@ require('lazy').setup({
           handlers = {
             ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' }),
           },
+          on_attach = function(client, bufnr)
+            if client.name == 'pyright' then
+              client.server_capabilities.hoverProvider = true
+            end
+          end,
         },
         taplo = {},
       }
