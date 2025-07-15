@@ -200,8 +200,16 @@ rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
-  { 'NMAC427/guess-indent.nvim', opts = {} },
+  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+
+  { 'NMAC427/guess-indent.nvim', opts = {} }, -- detect tabstop and shiftwidth automatically
+
+  -- NOTE: Plugins can also be added by using a table,
+  -- with the first argument being the link and the following
+  -- keys can be used to configure plugin behavior/loading/etc.
+  --
+  -- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
+  --
 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
@@ -560,9 +568,7 @@ require('lazy').setup({
         group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if client == nil then
-            return
-          end
+          if client == nil then return end
           if client.name == 'ruff' then
             -- Disable hover in favor of Pyright
             client.server_capabilities.hoverProvider = false
@@ -940,9 +946,7 @@ require('lazy').setup({
       require('mini.ai').setup {
         n_lines = 500,
       }
-      local f = function(args)
-        vim.b[args.buf].miniai_disable = true
-      end
+      local f = function(args) vim.b[args.buf].miniai_disable = true end
       for _, filetype in pairs { 'fennel', 'clojure', 'scheme', 'lisp' } do
         vim.api.nvim_create_autocmd('Filetype', { pattern = filetype, callback = f })
       end
