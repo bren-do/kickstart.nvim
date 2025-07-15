@@ -680,6 +680,8 @@ require('lazy').setup({
             if client.name == 'pyright' then
               client.server_capabilities.hoverProvider = true
             end
+            -- Ensure that the hover functionality is enabled
+            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
           end,
         },
         taplo = {},
