@@ -672,19 +672,6 @@ require('lazy').setup({
               },
             },
           },
-          capabilities = vim.lsp.protocol.make_client_capabilities(),
-          handlers = {
-            ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' }),
-          },
-          on_attach = function(client, bufnr)
-            if client.name == 'pyright' then
-              client.server_capabilities.hoverProvider = true
-            end
-            -- Ensure that the hover functionality is enabled
-            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-            -- Add keymap for hover
-            vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr, desc = 'LSP Hover' })
-          end,
         },
         taplo = {},
       }
