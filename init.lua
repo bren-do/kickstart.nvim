@@ -638,14 +638,6 @@ require('lazy').setup({
                 functionLikeReturnTypes = { enabled = true },
                 enumMemberValues = { enabled = true },
               },
-              -- Ensure the language server uses the correct tsconfig.json
-              tsconfig = {
-                path = 'tsconfig.json',
-              },
-              -- Add root directory configuration
-              root_dir = function(fname)
-                return require('lspconfig.util').root_pattern('tsconfig.json')(fname) or vim.loop.cwd()
-              end,
             },
           },
         },
