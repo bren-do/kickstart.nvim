@@ -638,6 +638,10 @@ require('lazy').setup({
                 functionLikeReturnTypes = { enabled = true },
                 enumMemberValues = { enabled = true },
               },
+              -- Ensure the language server uses the correct tsconfig.json
+              tsconfig = {
+                path = 'tsconfig.json',
+              },
             },
           },
         },
