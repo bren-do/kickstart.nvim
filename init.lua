@@ -682,6 +682,8 @@ require('lazy').setup({
             end
             -- Ensure that the hover functionality is enabled
             vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+            -- Add keymap for hover
+            vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr, desc = 'LSP Hover' })
           end,
         },
         taplo = {},
