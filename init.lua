@@ -299,8 +299,8 @@ require('lazy').setup({
     -- instead of just disabling it here, to keep your config clean.
     enabled = true,
     event = 'VimEnter',
-    --commit = 'df534c3042572fb958586facd02841e10186707c',
-    branch = '0.1.x',
+    commit = 'b4da76be54691e854d3e0e02c36b0245f945c2c7',
+    --branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -352,9 +352,11 @@ require('lazy').setup({
         --   },
         -- },
         pickers = {
+          -- If you ever need to change the fname width
+          -- lsp_references = { fname_width = 80 },
           live_grep = {
             mappings = {
-              i = { ['<c-space>'] = require('telescope.actions').to_fuzzy_refine },
+              i = { ['<c-f>'] = require('telescope.actions').to_fuzzy_refine },
             },
           },
         },
