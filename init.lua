@@ -657,7 +657,7 @@ require('lazy').setup({
             },
           },
         },
-        pyright = {
+        pyright = { -- NOTE: More config in adhoc lsp config section
           disableOrganizeImports = true,
           disableTaggedHints = true,
           settings = {
@@ -726,6 +726,12 @@ require('lazy').setup({
       })
       vim.lsp.enable 'lua_ls'
     end,
+
+    -- AdHoc LspConfig
+
+    vim.lsp.config('vtsls', {
+      root_markers = { 'package.json', 'git' },
+    }),
   },
 
   { -- Autoformat
