@@ -356,7 +356,7 @@ require('lazy').setup({
           -- lsp_references = { fname_width = 80 },
           live_grep = {
             mappings = {
-              i = { ['<c-f>'] = require('telescope.actions').to_fuzzy_refine },
+              i = { ['<c-space>'] = require('telescope.actions').to_fuzzy_refine },
             },
           },
         },
@@ -726,12 +726,6 @@ require('lazy').setup({
       })
       vim.lsp.enable 'lua_ls'
     end,
-
-    -- AdHoc LspConfig
-
-    vim.lsp.config('vtsls', {
-      root_markers = { 'package.json', 'git' },
-    }),
   },
 
   { -- Autoformat
