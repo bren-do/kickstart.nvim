@@ -97,10 +97,10 @@ vim.diagnostic.config {
   update_in_insert = false,
   severity_sort = true,
   float = { border = 'rounded', source = 'if_many' },
-  underline = { severity = vim.diagnostic.severity.ERROR },
+  underline = true,
 
   -- Can switch between these as you prefer
-  virtual_text = true, -- Text shows up at the end of the line
+  virtual_text = false, -- Text shows up at the end of the line
   virtual_lines = false, -- Teest shows up underneath the line, with virtual lines
 
   -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
@@ -129,10 +129,6 @@ vim.keymap.set('c', '<C-E>', '<End>', { noremap = true })
 vim.keymap.set('c', '<C-F>', '<Right>', { noremap = true })
 vim.keymap.set('c', '<Esc><C-B>', '<S-Left>', { noremap = true })
 vim.keymap.set('c', '<Esc><C-F>', '<S-Right>', { noremap = true })
-
--- Diagnostic config
--- this disables virtual text for error info
-vim.diagnostic.config { virtual_text = false, float = { border = 'rounded' } }
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
