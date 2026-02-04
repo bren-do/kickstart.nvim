@@ -264,6 +264,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
+        { '<leader>a', group = '[A]I', mode = { 'n', 'v' } },
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
         { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ebug', mode = { 'n' } },
@@ -271,11 +272,10 @@ require('lazy').setup({
         { '<leader>ec', group = '[E]val and [C]omment', mode = { 'n' } },
         { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
         { '<leader>l', group = 'Rep[L]', mode = { 'n' } },
-        { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]est' },
-        { '<leader>td', group = '[T]est [D]ebug', mode = { 'n', 'v' } },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>n', group = '[N]eotest' },
+        { '<leader>nd', group = '[N]eotest [D]ebug', mode = { 'n', 'v' } },
       },
     },
   },

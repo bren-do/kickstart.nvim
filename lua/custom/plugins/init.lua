@@ -40,9 +40,7 @@ return {
   },
   {
     'dmmulroy/ts-error-translator.nvim',
-    config = function()
-      require('ts-error-translator').setup {}
-    end,
+    config = function() require('ts-error-translator').setup {} end,
   },
   {
     'antosha417/nvim-lsp-file-operations',
@@ -50,9 +48,7 @@ return {
       'nvim-lua/plenary.nvim',
       'nvim-neo-tree/neo-tree.nvim',
     },
-    config = function()
-      require('lsp-file-operations').setup()
-    end,
+    config = function() require('lsp-file-operations').setup() end,
   },
   {
     'NeogitOrg/neogit',
@@ -101,9 +97,7 @@ return {
   {
     'https://github.com/nvim-treesitter/nvim-treesitter-context',
     config = function()
-      vim.keymap.set('n', '[c', function()
-        require('treesitter-context').go_to_context(vim.v.count1)
-      end, { silent = true })
+      vim.keymap.set('n', '[c', function() require('treesitter-context').go_to_context(vim.v.count1) end, { silent = true })
     end,
   },
   { 'sindrets/diffview.nvim', opts = { default_args = { DiffviewOpen = { '--imply-local' } } } },
@@ -135,6 +129,8 @@ return {
       vim.g['conjure#mapping#doc_word'] = 'ck'
       -- Rebind it from <prefix>gd to <prefix>cd
       vim.g['conjure#mapping#def_word'] = 'cD'
+      -- Rebind it from <prefix>ts to <prefix>es
+      vim.g['conjure#mapping#stray'] = 'eS'
       -- Disable auto_require
       vim.g['conjure#client#clojure#nrepl#eval#auto_require'] = false
       -- Disable auto_repl for clojure
